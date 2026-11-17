@@ -59,7 +59,7 @@ app.use('/api', routes);
 // Middleware centralizado de tratamento de erros
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`[TatamyHub API] Servidor rodando com sucesso em http://localhost:${PORT}`);
 });
 

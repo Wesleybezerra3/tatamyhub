@@ -16,15 +16,33 @@ async function runMigrations() {
   const password = process.env.DB_PASSWORD || '';
   const database = process.env.DB_NAME || 'tatamyhub';
 
-  console.log(`[Migrations] Conectando ao MySQL em ${host}:${port}...`);
+  const isCloudHost = (host.includes('tidbcloud.com') || host.includes('aivencloud.com') || host.includes('railway') || process.env.DB_SSL === 'true');
+  const sslConfig = isCloudHost ? { minVersion: 'TLSv1.2', rejectUnauthorized: true } : undefined;
 
-  // Conexão inicial para garantir que o banco existe
-  const initConnection = await mysql.createConnection({ host, port, user, password });
-  await initConnection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`);
-  await initConnection.end();
+  console.log(`[Migrations] Conectando ao MySQL em ${host}:${port} (SSL: ${isCloudHost ? 'Ativo' : 'Desativado'})...`);
+
+  // Se não for nuvem, tenta criar o banco caso não exista
+  if (!isCloudHost) {
+    try {
+      const initConnection = await mysql.createConnection({ host, port, user, password, connectTimeout: 10000 });
+      await initConnection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`);
+      await initConnection.end();
+    } catch (initErr) {
+      console.warn('[Migrations] Aviso ao inicializar database local:', initErr.message);
+    }
+  }
 
   // Conectar diretamente ao banco da aplicação
-  const connection = await mysql.createConnection({ host, port, user, password, database, multipleStatements: true });
+  const connection = await mysql.createConnection({
+    host,
+    port,
+    user,
+    password,
+    database,
+    multipleStatements: true,
+    connectTimeout: 30000,
+    ssl: sslConfig
+  });
 
   try {
     // Tabela de controle de migrations
