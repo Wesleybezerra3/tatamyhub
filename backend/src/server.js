@@ -14,36 +14,44 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// CORS flexível para desenvolvimento e acesso via rede local / mobile
+// CORS robusto para produção (Vercel), desenvolvimento e mobile
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
+
+  // Responde imediatamente a qualquer requisição preflight (OPTIONS)
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+  next();
+});
+
 const configuredOrigin = process.env.CORS_ORIGIN;
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Permite chamadas locais / sem header origin (curl, mobile webview, postman)
-    if (!origin) return callback(null, true);
-
-    // Se estiver explicitamente definido como '*' ou '0.0.0.0'
-    if (!configuredOrigin || configuredOrigin === '*' || configuredOrigin.includes('0.0.0.0')) {
-      return callback(null, true);
-    }
-
-    const allowed = configuredOrigin.split(',').map(o => o.trim());
-    if (allowed.includes(origin)) {
-      return callback(null, true);
-    }
-
-    // Permite qualquer acesso local (localhost, 127.0.0.1, 192.168.*, 172.*, 10.*)
-    const isLocalOrLAN = /^http:\/\/(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|172\.\d+\.\d+\.\d+|10\.\d+\.\d+\.\d+)(:\d+)?$/.test(origin);
-    if (isLocalOrLAN) {
-      return callback(null, true);
-    }
-
-    return callback(null, true);
+    callback(null, true);
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With']
 }));
+app.options('*', cors());
+
+// Health check para monitorar se a API está ativa no Render
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', uptime: process.uptime(), timestamp: new Date().toISOString() });
+});
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'ok', uptime: process.uptime(), timestamp: new Date().toISOString() });
+});
 
 // Body Parsers
 app.use(express.json());
