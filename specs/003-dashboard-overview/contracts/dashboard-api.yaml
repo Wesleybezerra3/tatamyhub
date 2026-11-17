@@ -1,0 +1,78 @@
+openapi: 3.0.3
+info:
+  title: TatamyHub - API de Dashboard e Métricas
+  description: Endpoint de consolidação das métricas operacionais e financeiras da academia.
+  version: 1.0.0
+paths:
+  /api/dashboard/metrics:
+    get:
+      summary: Retorna as métricas operacionais consolidadas da academia
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Métricas calculadas com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardMetrics'
+        '401':
+          description: Usuário não autenticado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    DashboardMetrics:
+      type: object
+      properties:
+        alunos_ativos:
+          type: integer
+          example: 35
+        mensalidades_atrasadas_qtd:
+          type: integer
+          example: 4
+        mensalidades_atrasadas_valor:
+          type: number
+          format: float
+          example: 760.00
+        arrecadado_mes_valor:
+          type: number
+          format: float
+          example: 5250.00
+        modalidades_ativas_qtd:
+          type: integer
+          example: 2
+        alertas:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: alert-1
+              tipo:
+                type: string
+                enum: [atraso, vencimento, onboarding, info]
+                example: atraso
+              mensagem:
+                type: string
+                example: 4 mensalidades aguardam cobrança via WhatsApp
+              acao_url:
+                type: string
+                example: /mensalidades
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Token de autenticação não fornecido.

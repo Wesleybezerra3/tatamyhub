@@ -1,0 +1,463 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: var(--content-max-width, 640px);
+  margin: 0 auto;
+  padding: 16px;
+  padding-bottom: calc(var(--bottom-nav-height, 68px) + 32px);
+}
+
+@media (min-width: 1024px) {
+  .page {
+    max-width: 900px;
+    padding: 24px;
+    padding-bottom: 48px;
+  }
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.titleGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.iconCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.titleIcon {
+  color: #34D399;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.batchBtn, .createBtn {
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.batchBtn {
+  background-color: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  color: #A78BFA;
+}
+
+.batchBtn:hover {
+  background-color: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.4);
+}
+
+.createBtn {
+  background: var(--brand-gradient);
+  border: none;
+  color: #FFFFFF;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
+}
+
+.createBtn:hover {
+  background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%);
+}
+
+@media (max-width: 480px) {
+  .headerActions {
+    width: 100%;
+  }
+  .batchBtn, .createBtn {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* Summary Grid */
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .summaryGrid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+.summaryCard {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: var(--shadow-sm);
+}
+
+.summaryTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summaryCardLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.summaryCardValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-family: var(--font-display);
+  color: var(--text-primary);
+}
+
+.summaryCardSub {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.summaryOverdue {
+  border-left: 3px solid #EF4444;
+}
+
+.summaryOverdue .summaryCardValue {
+  color: #F87171;
+}
+
+.overdueIcon {
+  color: #EF4444;
+}
+
+.summaryPending {
+  border-left: 3px solid #F59E0B;
+}
+
+.summaryPending .summaryCardValue {
+  color: #FBBF24;
+}
+
+.pendingIcon {
+  color: #F59E0B;
+}
+
+.summaryPaid {
+  border-left: 3px solid #10B981;
+}
+
+.summaryPaid .summaryCardValue {
+  color: #34D399;
+}
+
+.paidIcon {
+  color: #10B981;
+}
+
+/* Filters Section */
+.filtersSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filterPills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.filterPills::-webkit-scrollbar {
+  display: none;
+}
+
+.pill {
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: var(--radius-full);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.pill:hover {
+  background-color: var(--bg-surface-elevated);
+  color: var(--text-primary);
+}
+
+.pillActive {
+  background-color: rgba(59, 130, 246, 0.15);
+  border-color: var(--brand-primary);
+  color: #60A5FA;
+}
+
+.pillCount {
+  background-color: rgba(255, 255, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  font-size: 0.6875rem;
+}
+
+.pillOverdue:hover {
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.pillActiveOverdue {
+  background-color: rgba(239, 68, 68, 0.15);
+  border-color: #EF4444;
+  color: #F87171;
+}
+
+.pillCountOverdue {
+  background-color: #EF4444;
+  color: #FFFFFF;
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  font-size: 0.6875rem;
+}
+
+.pillPending:hover {
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.pillActivePending {
+  background-color: rgba(245, 158, 11, 0.15);
+  border-color: #F59E0B;
+  color: #FBBF24;
+}
+
+.pillPaid:hover {
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.pillActivePaid {
+  background-color: rgba(16, 185, 129, 0.15);
+  border-color: #10B981;
+  color: #34D399;
+}
+
+/* Search Row */
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.searchBox {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 40px 0 42px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.searchInput:focus {
+  border-color: var(--border-focus);
+}
+
+.clearSearchBtn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+}
+
+.clearSearchBtn:hover {
+  color: var(--text-primary);
+}
+
+.competenciaWrapper {
+  flex-shrink: 0;
+}
+
+.competenciaSelect {
+  min-height: 44px;
+  padding: 0 12px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.8125rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.competenciaSelect:focus {
+  border-color: var(--border-focus);
+}
+
+.refreshBtn {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.refreshBtn:hover {
+  color: var(--text-primary);
+  background-color: var(--bg-surface-elevated);
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+/* Invoices List */
+.invoicesList {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.loadingContainer, .emptyContainer {
+  padding: 48px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  gap: 12px;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  color: var(--brand-primary);
+}
+
+.emptyIcon {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.emptyTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.emptyText {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  max-width: 400px;
+  margin: 0;
+}
+
+.emptyActionBtn {
+  min-height: 44px;
+  margin-top: 8px;
+  padding: 0 16px;
+  border-radius: var(--radius-sm);
+  background: var(--brand-gradient);
+  border: none;
+  color: #FFFFFF;
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

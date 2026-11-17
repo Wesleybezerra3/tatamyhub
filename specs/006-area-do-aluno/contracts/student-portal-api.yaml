@@ -1,0 +1,142 @@
+openapi: 3.0.3
+info:
+  title: TatamyHub Student Portal API
+  description: Endpoints exclusivos para a Área e Hub do Aluno.
+  version: 1.0.0
+paths:
+  /aluno/login:
+    post:
+      summary: Autenticação do Aluno
+      description: Permite ao aluno autenticar-se usando telefone ou e-mail cadastrado e senha.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - identificador
+                - senha
+              properties:
+                identificador:
+                  type: string
+                  description: Telefone celular ou e-mail do aluno
+                  example: "11988887777"
+                senha:
+                  type: string
+                  description: Senha de acesso
+                  example: "Senha123"
+      responses:
+        '200':
+          description: Login realizado com sucesso. Retorna token JWT de aluno.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  aluno:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      nome:
+                        type: string
+                      academia_id:
+                        type: integer
+                      primeiro_acesso:
+                        type: boolean
+        '401':
+          description: Identificador ou senha incorretos.
+
+  /aluno/hub:
+    get:
+      summary: Dados consolidados do Hub do Aluno
+      description: Retorna graduação atual, histórico marcial, resumo financeiro e alertas com flag para popup.
+      security:
+        - StudentBearerAuth: []
+      responses:
+        '200':
+          description: Hub consolidado retornado com sucesso.
+        '401':
+          description: Não autenticado ou token inválido.
+
+  /aluno/mensalidades:
+    get:
+      summary: Lista de mensalidades do aluno
+      description: Retorna histórico de faturas do aluno autenticado.
+      security:
+        - StudentBearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [pendente, paga, atrasada]
+      responses:
+        '200':
+          description: Lista de faturas com dados e chave PIX da academia.
+
+  /aluno/trocar-senha:
+    post:
+      summary: Alteração de senha pelo aluno
+      security:
+        - StudentBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - senha_atual
+                - nova_senha
+              properties:
+                senha_atual:
+                  type: string
+                nova_senha:
+                  type: string
+      responses:
+        '200':
+          description: Senha alterada com sucesso.
+
+  /alunos/{id}/credenciais:
+    patch:
+      summary: Gestor define/reseta senha do aluno
+      description: Endpoint administrativo para o gestor definir a senha inicial do aluno.
+      security:
+        - AdminBearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nova_senha
+              properties:
+                nova_senha:
+                  type: string
+                  example: "Tatamy2026"
+      responses:
+        '200':
+          description: Senha do aluno redefinida pelo gestor com sucesso.
+
+components:
+  securitySchemes:
+    StudentBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    AdminBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

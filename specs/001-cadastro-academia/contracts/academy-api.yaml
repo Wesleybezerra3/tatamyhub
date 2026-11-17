@@ -1,0 +1,322 @@
+openapi: 3.0.3
+info:
+  title: TatamyHub - API de Perfil da Academia e Modalidades
+  description: Endpoints para gerenciamento dos dados institucionais, logotipo e modalidades esportivas.
+  version: 1.0.0
+paths:
+  /api/academia:
+    get:
+      summary: Retorna os dados cadastrais da academia
+      responses:
+        '200':
+          description: Perfil da academia recuperado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Academia'
+        '404':
+          description: Academia ainda não configurada
+    put:
+      summary: Atualiza ou cria as informações cadastrais da academia
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcademiaInput'
+      responses:
+        '200':
+          description: Dados da academia atualizados com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Academia'
+        '400':
+          description: Dados inválidos ou campos obrigatórios ausentes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/academia/logo:
+    post:
+      summary: Faz upload do arquivo de logotipo da academia
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - logo
+              properties:
+                logo:
+                  type: string
+                  format: binary
+                  description: Imagem PNG, JPEG ou WebP de até 2MB
+      responses:
+        '200':
+          description: Logotipo atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  logo_url:
+                    type: string
+                    example: /uploads/logos/academia-1.png
+        '400':
+          description: Arquivo inválido ou superior ao limite permitido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Remove o logotipo atual da academia
+      responses:
+        '200':
+          description: Logotipo removido com sucesso
+
+  /api/modalidades:
+    get:
+      summary: Lista modalidades esportivas da academia
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [ativa, inativa, todas]
+            default: ativa
+          description: Filtro por estado operacional da modalidade
+      responses:
+        '200':
+          description: Lista de modalidades retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Modalidade'
+    post:
+      summary: Adiciona nova modalidade esportiva
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModalidadeInput'
+      responses:
+        '201':
+          description: Modalidade criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Modalidade'
+        '400':
+          description: Nome em branco ou modalidade duplicada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/modalidades/{id}:
+    put:
+      summary: Atualiza nome, descrição ou status de uma modalidade
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModalidadeUpdateInput'
+      responses:
+        '200':
+          description: Modalidade atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Modalidade'
+        '404':
+          description: Modalidade não encontrada
+
+components:
+  schemas:
+    Academia:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nome:
+          type: string
+          example: Gracie Barra Vila Mariana
+        documento:
+          type: string
+          nullable: true
+          example: 12.345.678/0001-90
+        email:
+          type: string
+          format: email
+          nullable: true
+          example: contato@academia.com.br
+        telefone:
+          type: string
+          nullable: true
+          example: (11) 3456-7890
+        whatsapp:
+          type: string
+          nullable: true
+          example: (11) 98765-4321
+        logradouro:
+          type: string
+          nullable: true
+          example: Rua Domingos de Morais
+        numero:
+          type: string
+          nullable: true
+          example: 1000
+        complemento:
+          type: string
+          nullable: true
+          example: Sala 2
+        bairro:
+          type: string
+          nullable: true
+          example: Vila Mariana
+        cidade:
+          type: string
+          nullable: true
+          example: São Paulo
+        estado:
+          type: string
+          nullable: true
+          example: SP
+        cep:
+          type: string
+          nullable: true
+          example: 04010-100
+        logo_url:
+          type: string
+          nullable: true
+          example: /uploads/logos/academia-1.png
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    AcademiaInput:
+      type: object
+      required:
+        - nome
+      properties:
+        nome:
+          type: string
+          example: Gracie Barra Vila Mariana
+        documento:
+          type: string
+          nullable: true
+        email:
+          type: string
+          format: email
+          nullable: true
+        telefone:
+          type: string
+          nullable: true
+        whatsapp:
+          type: string
+          nullable: true
+        logradouro:
+          type: string
+          nullable: true
+        numero:
+          type: string
+          nullable: true
+        complemento:
+          type: string
+          nullable: true
+        bairro:
+          type: string
+          nullable: true
+        cidade:
+          type: string
+          nullable: true
+        estado:
+          type: string
+          nullable: true
+        cep:
+          type: string
+          nullable: true
+
+    Modalidade:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        academia_id:
+          type: integer
+          example: 1
+        nome:
+          type: string
+          example: Jiu-Jitsu
+        descricao:
+          type: string
+          nullable: true
+          example: Aulas com quimono (Gi)
+        status:
+          type: string
+          enum: [ativa, inativa]
+          example: ativa
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    ModalidadeInput:
+      type: object
+      required:
+        - nome
+      properties:
+        nome:
+          type: string
+          example: Muay Thai
+        descricao:
+          type: string
+          nullable: true
+          example: Treinos de condicionamento e combate em pé
+        status:
+          type: string
+          enum: [ativa, inativa]
+          default: ativa
+
+    ModalidadeUpdateInput:
+      type: object
+      properties:
+        nome:
+          type: string
+        descricao:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [ativa, inativa]
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: O nome da academia é obrigatório.
+        details:
+          type: array
+          items:
+            type: string

@@ -1,0 +1,270 @@
+openapi: 3.0.3
+info:
+  title: TatamyHub Financial & Memberships API
+  description: Endpoints para gestão de mensalidades, pagamentos e cobranças no tatame
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001/api
+    description: Servidor de Desenvolvimento Local
+
+paths:
+  /mensalidades:
+    get:
+      summary: Listar faturas de mensalidades
+      description: Retorna as mensalidades com filtros por status, competência e busca por aluno.
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [todas, pendente, atrasada, paga, cancelada]
+            default: todas
+        - name: competencia
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "11/2026"
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+            description: Nome do aluno
+      responses:
+        '200':
+          description: Lista de mensalidades retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MensalidadeListItem'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      summary: Criar mensalidade individual
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMensalidadeRequest'
+      responses:
+        '201':
+          description: Mensalidade criada com sucesso
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /mensalidades/gerar-lote:
+    post:
+      summary: Gerar mensalidades do mês em lote para alunos ativos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - competencia
+                - data_vencimento
+              properties:
+                competencia:
+                  type: string
+                  example: "11/2026"
+                data_vencimento:
+                  type: string
+                  format: date
+                valor_padrao:
+                  type: number
+                  default: 120.00
+      responses:
+        '200':
+          description: Resumo da geração em lote
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  geradas:
+                    type: integer
+                  ignoradas_existentes:
+                    type: integer
+                  total_alunos_ativos:
+                    type: integer
+
+  /mensalidades/{id}:
+    get:
+      summary: Obter detalhes da mensalidade e pagamentos vinculados
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalhes da fatura e histórico de quitações
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensalidadeDetail'
+        '404':
+          description: Mensalidade não encontrada
+
+  /mensalidades/{id}/pagamentos:
+    post:
+      summary: Registrar pagamento / baixa de mensalidade
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterPaymentRequest'
+      responses:
+        '201':
+          description: Pagamento registrado e saldo atualizado com sucesso
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /mensalidades/{id}/cancelar:
+    patch:
+      summary: Cancelar mensalidade não paga
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Mensalidade cancelada com sucesso
+        '400':
+          description: Mensalidade possui pagamentos e não pode ser cancelada diretamente
+
+components:
+  schemas:
+    MensalidadeListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        aluno_id:
+          type: integer
+        aluno_nome:
+          type: string
+        aluno_telefone:
+          type: string
+        aluno_faixa:
+          type: string
+        valor:
+          type: number
+        valor_pago:
+          type: number
+        saldo_devedor:
+          type: number
+        data_vencimento:
+          type: string
+          format: date
+        competencia:
+          type: string
+        status:
+          type: string
+          enum: [pendente, paga, atrasada, cancelada]
+
+    CreateMensalidadeRequest:
+      type: object
+      required:
+        - aluno_id
+        - valor
+        - data_vencimento
+        - competencia
+      properties:
+        aluno_id:
+          type: integer
+        valor:
+          type: number
+          minimum: 0.01
+        data_vencimento:
+          type: string
+          format: date
+        competencia:
+          type: string
+          example: "11/2026"
+        observacoes:
+          type: string
+
+    RegisterPaymentRequest:
+      type: object
+      required:
+        - valor
+        - forma_pagamento
+      properties:
+        valor:
+          type: number
+          minimum: 0.01
+        forma_pagamento:
+          type: string
+          enum: [pix, dinheiro, cartao_credito, cartao_debito, outro]
+        data_pagamento:
+          type: string
+          format: date
+        observacao:
+          type: string
+
+    MensalidadeDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+        aluno_id:
+          type: integer
+        aluno_nome:
+          type: string
+        aluno_telefone:
+          type: string
+        valor:
+          type: number
+        valor_pago:
+          type: number
+        data_vencimento:
+          type: string
+          format: date
+        competencia:
+          type: string
+        status:
+          type: string
+        observacoes:
+          type: string
+        pagamentos:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              valor:
+                type: number
+              forma_pagamento:
+                type: string
+              data_pagamento:
+                type: string
+                format: date
+              observacao:
+                type: string
+              usuario_nome:
+                type: string
+
+  responses:
+    Unauthorized:
+      description: Token JWT ausente ou inválido
+    BadRequest:
+      description: Parâmetros inválidos ou violação de regra financeira

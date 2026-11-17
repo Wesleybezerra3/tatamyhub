@@ -1,0 +1,262 @@
+.card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.card:hover {
+  background-color: var(--bg-surface-elevated);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+/* Card status accent borders */
+.card.atrasada {
+  border-left: 4px solid #EF4444;
+}
+
+.card.pendente {
+  border-left: 4px solid #F59E0B;
+}
+
+.card.paga {
+  border-left: 4px solid #10B981;
+}
+
+.card.cancelada {
+  border-left: 4px solid #64748B;
+  opacity: 0.65;
+}
+
+/* Header Row */
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.studentInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.studentName {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.metaSubtitle {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+/* Status Badge */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+
+.status_paga {
+  background-color: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #34D399;
+}
+
+.status_atrasada {
+  background-color: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #F87171;
+}
+
+.status_pendente {
+  background-color: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: #FBBF24;
+}
+
+.status_cancelada {
+  background-color: rgba(100, 116, 139, 0.12);
+  border: 1px solid rgba(100, 116, 139, 0.25);
+  color: #94A3B8;
+}
+
+/* Details Row */
+.detailsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 12px 14px;
+  background-color: rgba(14, 21, 36, 0.6);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(31, 41, 61, 0.5);
+  gap: 12px;
+}
+
+.dueDateCol, .valuesCol {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.valuesCol {
+  align-items: flex-end;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dueDateValue {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dateIcon {
+  color: var(--text-muted);
+}
+
+.overdueDate {
+  color: #F87171;
+}
+
+.mainValueRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.valueAmount {
+  font-size: 1.125rem;
+  font-weight: 700;
+  font-family: var(--font-display);
+  color: var(--text-primary);
+}
+
+.overdueAmount {
+  color: #F87171;
+}
+
+.paidAmount {
+  color: #34D399;
+}
+
+.partialNote {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+/* Actions Row */
+.actionsRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.whatsappBtn, .payBtn {
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.whatsappBtn {
+  flex: 1;
+  background-color: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  color: #4ADE80;
+}
+
+.whatsappBtn:hover {
+  background-color: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.whatsappBtn:active {
+  transform: scale(0.98);
+}
+
+.payBtn {
+  flex: 1;
+  background: var(--brand-gradient);
+  color: #FFFFFF;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
+}
+
+.payBtn:hover {
+  background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%);
+}
+
+.payBtn:active {
+  transform: scale(0.98);
+}
+
+.paidConfirmation {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  color: #34D399;
+  font-weight: 500;
+  padding: 6px 0;
+}
+
+.paidIcon {
+  color: #10B981;
+}
+
+@media (max-width: 480px) {
+  .actionsRow {
+    flex-direction: column;
+  }
+  
+  .whatsappBtn, .payBtn {
+    width: 100%;
+  }
+}

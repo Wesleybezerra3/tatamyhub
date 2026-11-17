@@ -1,0 +1,181 @@
+.card {
+  background-color: var(--bg-surface, #1E293B);
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+  border-radius: var(--radius-lg, 14px);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.15s ease;
+}
+
+.card:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.competenciaRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.competencia {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary, #F8FAFC);
+}
+
+.statusBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  text-transform: capitalize;
+}
+
+.statusPendente {
+  background-color: rgba(234, 179, 8, 0.15);
+  color: #FACC15;
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.statusAtrasada {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #F87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.statusPaga {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.mainInfo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 4px;
+}
+
+.valor {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #F8FAFC;
+  font-family: var(--font-display, inherit);
+}
+
+.vencimento {
+  font-size: 0.8125rem;
+  color: var(--text-secondary, #94A3B8);
+}
+
+.pixBox {
+  background-color: rgba(15, 23, 42, 0.5);
+  border: 1px dashed rgba(59, 130, 246, 0.3);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pixHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #93C5FD;
+}
+
+.pixTitularRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: #CBD5E1;
+  background-color: rgba(255, 255, 255, 0.02);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.pixTitularLabel {
+  color: #94A3B8;
+  font-weight: 500;
+}
+
+.pixTitularNome {
+  color: #F8FAFC;
+  font-weight: 600;
+}
+
+.pixKeyRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background-color: rgba(255, 255, 255, 0.04);
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.pixKeyText {
+  font-size: 0.8125rem;
+  font-family: monospace;
+  color: #F1F5F9;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copyPixBtn {
+  background-color: #2563EB;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.copyPixBtn:hover {
+  background-color: #1D4ED8;
+}
+
+.copyPixSuccess {
+  background-color: #10B981 !important;
+}
+
+.whatsappProofBtn {
+  background: transparent;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #4ADE80;
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.whatsappProofBtn:hover {
+  background-color: rgba(34, 197, 94, 0.1);
+}

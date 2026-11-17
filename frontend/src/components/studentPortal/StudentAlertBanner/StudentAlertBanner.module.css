@@ -1,0 +1,101 @@
+.banner {
+  border-radius: var(--radius-lg, 14px);
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.bannerAtrasada {
+  background-color: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #FCA5A5;
+}
+
+.bannerAtencao {
+  background-color: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  color: #FDE047;
+}
+
+.bannerRegular {
+  background-color: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #6EE7B7;
+}
+
+.contentWrapper {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.iconCircle {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iconAtrasada {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #EF4444;
+}
+
+.iconAtencao {
+  background-color: rgba(234, 179, 8, 0.2);
+  color: #EAB308;
+}
+
+.iconRegular {
+  background-color: rgba(16, 185, 129, 0.2);
+  color: #10B981;
+}
+
+.textGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.message {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  margin: 0;
+  color: var(--text-secondary, #CBD5E1);
+}
+
+.actionBtn {
+  background-color: #2563EB;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.actionBtn:hover {
+  background-color: #1D4ED8;
+}

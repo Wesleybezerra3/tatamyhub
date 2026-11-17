@@ -1,0 +1,329 @@
+openapi: 3.0.3
+info:
+  title: TatamyHub Students and Graduations API
+  description: Endpoints para gestão de alunos, modalidades praticadas e histórico de graduações
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001/api
+    description: Servidor de Desenvolvimento Local
+
+paths:
+  /alunos:
+    get:
+      summary: Listar alunos da academia
+      description: Retorna a lista de alunos com busca por nome e filtros por modalidade e status.
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Termo para busca por nome do aluno
+        - name: modalidade_id
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Filtrar por ID da modalidade
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [ativo, inativo, todos]
+            default: ativo
+          description: Filtrar por status do aluno
+      responses:
+        '200':
+          description: Lista de alunos recuperada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AlunoListItem'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      summary: Cadastrar novo aluno
+      description: Cadastra o aluno e vincula sua modalidade e graduação inicial.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAlunoRequest'
+      responses:
+        '201':
+          description: Aluno cadastrado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlunoDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /alunos/{id}:
+    get:
+      summary: Obter detalhes do aluno
+      description: Retorna dados cadastrais, modalidades e histórico cronológico de graduações.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalhes do aluno retornados com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlunoDetail'
+        '404':
+          description: Aluno não encontrado
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    put:
+      summary: Atualizar dados cadastrais do aluno
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAlunoRequest'
+      responses:
+        '200':
+          description: Aluno atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlunoDetail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          description: Aluno não encontrado
+
+  /alunos/{id}/status:
+    patch:
+      summary: Alterar status do aluno (Ativo / Inativo)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+                  enum: [ativo, inativo]
+      responses:
+        '200':
+          description: Status atualizado com sucesso
+        '404':
+          description: Aluno não encontrado
+
+  /alunos/{id}/graduacoes:
+    post:
+      summary: Registrar nova graduação / promoção de faixa
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGraduacaoRequest'
+      responses:
+        '201':
+          description: Graduação registrada e faixa atualizada com sucesso
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          description: Aluno ou modalidade não encontrada
+
+components:
+  schemas:
+    AlunoListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        telefone:
+          type: string
+        status:
+          type: string
+          enum: [ativo, inativo]
+        modalidade_nome:
+          type: string
+        faixa_atual:
+          type: string
+        graus_atual:
+          type: integer
+
+    CreateAlunoRequest:
+      type: object
+      required:
+        - nome
+        - modalidade_id
+      properties:
+        nome:
+          type: string
+        telefone:
+          type: string
+        data_nascimento:
+          type: string
+          format: date
+        data_matricula:
+          type: string
+          format: date
+        observacoes_medicas:
+          type: string
+        modalidade_id:
+          type: integer
+        faixa_inicial:
+          type: string
+          default: Branca
+        graus_inicial:
+          type: integer
+          default: 0
+
+    UpdateAlunoRequest:
+      type: object
+      required:
+        - nome
+      properties:
+        nome:
+          type: string
+        telefone:
+          type: string
+        data_nascimento:
+          type: string
+          format: date
+        data_matricula:
+          type: string
+          format: date
+        observacoes_medicas:
+          type: string
+        status:
+          type: string
+          enum: [ativo, inativo]
+
+    CreateGraduacaoRequest:
+      type: object
+      required:
+        - modalidade_id
+        - faixa
+      properties:
+        modalidade_id:
+          type: integer
+        faixa:
+          type: string
+        graus:
+          type: integer
+          default: 0
+        data_graduacao:
+          type: string
+          format: date
+        observacao:
+          type: string
+
+    AlunoDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        telefone:
+          type: string
+        data_nascimento:
+          type: string
+          format: date
+        data_matricula:
+          type: string
+          format: date
+        observacoes_medicas:
+          type: string
+        status:
+          type: string
+          enum: [ativo, inativo]
+        modalidades:
+          type: array
+          items:
+            type: object
+            properties:
+              modalidade_id:
+                type: integer
+              modalidade_nome:
+                type: string
+              faixa_atual:
+                type: string
+              graus_atual:
+                type: integer
+              data_inicio:
+                type: string
+                format: date
+        historico_graduacoes:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              modalidade_nome:
+                type: string
+              faixa:
+                type: string
+              graus:
+                type: integer
+              data_graduacao:
+                type: string
+                format: date
+              observacao:
+                type: string
+              promovido_por_nome:
+                type: string
+
+  responses:
+    Unauthorized:
+      description: Token JWT ausente ou expirado
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+    BadRequest:
+      description: Erro nos parâmetros fornecidos
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string

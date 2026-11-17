@@ -1,0 +1,113 @@
+:root {
+  /* Color Palette - TatamyHub Martial Theme */
+  --bg-canvas: #090D16;
+  --bg-surface: #111827;
+  --bg-surface-elevated: #1F2937;
+  --bg-input: #0E1524;
+  
+  --border-subtle: #1F293D;
+  --border-focus: #3B82F6;
+  --border-danger: #EF4444;
+
+  --text-primary: #F9FAFB;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --text-inverse: #090D16;
+
+  /* Brand Accents */
+  --brand-primary: #3B82F6;
+  --brand-primary-hover: #2563EB;
+  --brand-gradient: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+  --accent-crimson: #E11D48;
+
+  /* Status Colors */
+  --status-active-bg: rgba(16, 185, 129, 0.15);
+  --status-active-border: rgba(16, 185, 129, 0.3);
+  --status-active-text: #34D399;
+
+  --status-inactive-bg: rgba(148, 163, 184, 0.12);
+  --status-inactive-border: rgba(148, 163, 184, 0.25);
+  --status-inactive-text: #94A3B8;
+
+  --feedback-success: #10B981;
+  --feedback-error: #EF4444;
+
+  /* Typography */
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Space Grotesk', var(--font-sans);
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 28px -6px rgba(0, 0, 0, 0.6);
+
+  /* Layout */
+  --header-height: 64px;
+  --bottom-nav-height: 68px;
+  --content-max-width: 640px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: all 0.15s ease-in-out;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Scrollbar customization */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-canvas);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
